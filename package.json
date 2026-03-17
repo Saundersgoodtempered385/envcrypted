@@ -1,0 +1,33 @@
+{
+  "name": "envcrypted",
+  "version": "1.0.0",
+  "description": "Secure your .env files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.",
+  "main": "src/index.js",
+  "bin": {
+    "envcrypted": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js"
+  },
+  "keywords": [
+    "env",
+    "dotenv",
+    "encryption",
+    "security",
+    "cli",
+    "aes256",
+    "environment",
+    "secrets",
+    "devtools"
+  ],
+  "author": "Mohammad Shoeb Faizan",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "crypto": "^1.0.1",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1",
+    "simple-git": "^3.22.0"
+  }
+}
