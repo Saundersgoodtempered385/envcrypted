@@ -2,18 +2,11 @@
 
 > Secure your `.env` files with AES-256 encryption. Share safely with your team via local vault or GitHub. Zero account. Zero server. Just works.
 
-[![npm version](https://img.shields.io/npm/v/envcrypted.svg)](https://www.npmjs.com/package/envcrypted)
-[![license](https://img.shields.io/npm/l/envcrypted.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/envcrypted)](https://www.npmjs.com/package/envcrypted)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## Demo
-
-<video src="https://res.cloudinary.com/dihe5x6gw/video/upload/v1773718582/envcrypted_yisvf8.mp4" controls width="100%"></video>
-
-> 📺 Can't see the video? [Watch it here](https://res.cloudinary.com/dihe5x6gw/video/upload/v1773718582/envcrypted_yisvf8.mp4)
-
----
 
 ## The Problem
 
@@ -47,8 +40,39 @@ Your secrets travel over chat apps, emails, Slack messages. They get leaked, for
 
 ## Install
 
+Install inside your project — works on **Windows, macOS, and Linux** without any PATH issues:
+
 ```bash
-npm install -g envcrypted
+npm install envcrypted
+```
+
+Then run commands using `npx`:
+
+```bash
+npx envcrypted init
+npx envcrypted audit
+npx envcrypted push
+npx envcrypted pull
+```
+
+### Or add to your `package.json` scripts for convenience:
+
+```json
+"scripts": {
+  "env:init":  "envcrypted init",
+  "env:audit": "envcrypted audit",
+  "env:push":  "envcrypted push",
+  "env:pull":  "envcrypted pull"
+}
+```
+
+Then run:
+
+```bash
+npm run env:audit
+npm run env:init
+npm run env:push
+npm run env:pull
 ```
 
 ---
@@ -59,29 +83,29 @@ npm install -g envcrypted
 Initialize envcrypted in your project. Generates a master key and sets your storage preference (local or GitHub).
 
 ```bash
-envcrypted init
+npx envcrypted init
 ```
 
 ### `envcrypted push`
 Encrypts your `.env` file and saves it as `.env.vault`. If you chose GitHub storage, it commits and pushes automatically.
 
 ```bash
-envcrypted push
-envcrypted push --message "feat: update API keys"
+npx envcrypted push
+npx envcrypted push --message "feat: update API keys"
 ```
 
 ### `envcrypted pull`
 Pulls the vault (from GitHub if applicable) and decrypts it back to `.env`.
 
 ```bash
-envcrypted pull
+npx envcrypted pull
 ```
 
 ### `envcrypted audit`
 Scans your `.env` for critical issues and warnings — weak passwords, placeholder keys, exposed DB URIs, HTTP URLs, debug flags, and more.
 
 ```bash
-envcrypted audit
+npx envcrypted audit
 ```
 
 **Example output:**
@@ -115,21 +139,23 @@ envcrypted audit
 
 **Team Lead (Project Setup):**
 ```bash
-envcrypted init         # generate master key, choose storage
-envcrypted push         # encrypt .env → .env.vault
+npx envcrypted init         # generate master key, choose storage
+npx envcrypted audit        # scan .env for issues first
+npx envcrypted push         # encrypt .env → .env.vault
 # share master key with team securely (password manager, etc.)
 ```
 
 **New Team Member:**
 ```bash
-envcrypted init         # initialize with same storage type
-envcrypted pull         # enter master key → .env restored
+npm install envcrypted      # install in project
+npx envcrypted init         # initialize with same storage type
+npx envcrypted pull         # enter master key → .env restored
 ```
 
 **Rotating Keys:**
 ```bash
 # Change master key, re-push
-envcrypted push         # enter new master key
+npx envcrypted push         # enter new master key
 # Share new key with team
 ```
 
@@ -165,7 +191,7 @@ The encrypted `.env.vault` is safe to commit to public or private repos. Without
 ## Built By
 
 **Mohammad Shoeb Faizan** — Full-Stack Developer & Automation Engineer  
-[GitHub](https://github.com/Mohammad-Shoeb-Faizan) | [LinkedIn](https://linkedin.com/in/mohammad-shoeb-faizan) | [NPM](https://npmjs.com/~mohammad-shoeb-faizan)
+[GitHub](https://github.com/Mohammad-Shoeb-Faizan) | [LinkedIn](https://linkedin.com/in/mohammad-shoeb-faizan) | [NPM](https://npmjs.com/~shoebcodes)
 
 ---
 
