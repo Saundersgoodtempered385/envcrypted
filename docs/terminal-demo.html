@@ -15,13 +15,13 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: 'JetBrains Mono', monospace; padding: 40px 20px; }
     body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px); pointer-events: none; z-index: 100; }
-    .demo-wrapper { width: 100%; max-width: 860px; }
+    .demo-wrapper { width: 100%; max-width: 900px; }
     .demo-header { text-align: center; margin-bottom: 40px; }
     .demo-header h1 { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; letter-spacing: -2px; color: var(--text); margin-bottom: 8px; }
     .demo-header h1 span { color: var(--green); }
     .demo-header p { font-size: 13px; color: var(--text2); font-weight: 300; }
-    .tab-bar { display: flex; gap: 4px; margin-bottom: 0; padding: 0 4px; }
-    .tab { padding: 10px 20px; font-size: 12px; color: var(--text2); border-radius: 6px 6px 0 0; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; border-bottom: none; letter-spacing: 0.5px; background: var(--bg3); }
+    .tab-bar { display: flex; gap: 3px; margin-bottom: 0; padding: 0 4px; flex-wrap: nowrap; overflow-x: auto; }
+    .tab { padding: 8px 14px; font-size: 11px; color: var(--text2); border-radius: 6px 6px 0 0; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; border-bottom: none; letter-spacing: 0.3px; background: var(--bg3); white-space: nowrap; }
     .tab:hover { color: var(--text); }
     .tab.active { color: var(--green); border-color: var(--border); background: #0a0f0a; border-bottom: 1px solid #0a0f0a; position: relative; z-index: 2; }
     .terminal { background: #0a0f0a; border: 1px solid var(--border); border-radius: 0 8px 8px 8px; overflow: hidden; box-shadow: 0 0 60px rgba(0,255,136,0.06), 0 32px 64px rgba(0,0,0,0.4); }
@@ -30,7 +30,7 @@
     .dot.r { background: #ff5f57; } .dot.y { background: #ffbd2e; } .dot.g { background: #28c840; }
     .terminal-path { margin-left: 12px; font-size: 12px; color: var(--text2); letter-spacing: 0.3px; }
     .terminal-path .path-green { color: var(--green); }
-    .terminal-body { padding: 28px 32px; min-height: 420px; font-size: 13.5px; line-height: 1.75; position: relative; }
+    .terminal-body { padding: 28px 32px; min-height: 380px; font-size: 13px; line-height: 1.75; position: relative; }
     .line { display: flex; align-items: flex-start; gap: 0; margin-bottom: 2px; }
     .prompt-sym { color: var(--green); margin-right: 10px; user-select: none; flex-shrink: 0; }
     .cmd { color: #ffffff; }
@@ -50,7 +50,7 @@
     .step-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
     .step-dot.active { background: var(--green); box-shadow: 0 0 8px var(--green); }
     .step-dot.done { background: var(--green3); }
-    .step-labels { display: flex; justify-content: center; gap: 32px; margin-top: 12px; }
+    .step-labels { display: flex; justify-content: center; gap: 20px; margin-top: 12px; flex-wrap: wrap; }
     .step-label-item { font-size: 11px; color: var(--text2); text-align: center; transition: color 0.3s; cursor: pointer; letter-spacing: 0.3px; }
     .step-label-item.active { color: var(--green); }
   </style>
@@ -59,7 +59,7 @@
   <div class="demo-wrapper">
     <div class="demo-header">
       <h1>env<span>crypted</span> 🔐</h1>
-      <p>Watch all 4 commands in action — live demo</p>
+      <p>Watch all 8 commands in action — v1.1.0 live demo</p>
     </div>
 
     <div class="tab-bar" id="tabBar">
@@ -67,6 +67,10 @@
       <div class="tab" onclick="jumpToStep(1)">$ audit</div>
       <div class="tab" onclick="jumpToStep(2)">$ push</div>
       <div class="tab" onclick="jumpToStep(3)">$ pull</div>
+      <div class="tab" onclick="jumpToStep(4)">$ generate</div>
+      <div class="tab" onclick="jumpToStep(5)">$ status</div>
+      <div class="tab" onclick="jumpToStep(6)">$ hook</div>
+      <div class="tab" onclick="jumpToStep(7)">$ doctor</div>
     </div>
 
     <div class="terminal">
@@ -76,7 +80,7 @@
         <div class="dot g"></div>
         <span class="terminal-path">
           <span class="path-green">~/my-project</span>
-          &nbsp;—&nbsp;envcrypted v1.0.3
+          &nbsp;—&nbsp;envcrypted v1.1.0
         </span>
       </div>
       <div class="terminal-body" id="termBody"></div>
@@ -85,7 +89,7 @@
           <button class="ctrl-btn active" id="playBtn" onclick="togglePlay()">⏸ PAUSE</button>
           <button class="ctrl-btn" onclick="restartDemo()">↺ RESTART</button>
         </div>
-        <span class="speed-label" id="stepLabel">Step 1 of 4 — npx envcrypted init</span>
+        <span class="speed-label" id="stepLabel">Step 1 of 8 — npx envcrypted init</span>
       </div>
     </div>
 
@@ -94,6 +98,10 @@
       <div class="step-dot" onclick="jumpToStep(1)"></div>
       <div class="step-dot" onclick="jumpToStep(2)"></div>
       <div class="step-dot" onclick="jumpToStep(3)"></div>
+      <div class="step-dot" onclick="jumpToStep(4)"></div>
+      <div class="step-dot" onclick="jumpToStep(5)"></div>
+      <div class="step-dot" onclick="jumpToStep(6)"></div>
+      <div class="step-dot" onclick="jumpToStep(7)"></div>
     </div>
 
     <div class="step-labels">
@@ -101,6 +109,10 @@
       <span class="step-label-item" onclick="jumpToStep(1)">audit</span>
       <span class="step-label-item" onclick="jumpToStep(2)">push</span>
       <span class="step-label-item" onclick="jumpToStep(3)">pull</span>
+      <span class="step-label-item" onclick="jumpToStep(4)">generate</span>
+      <span class="step-label-item" onclick="jumpToStep(5)">status</span>
+      <span class="step-label-item" onclick="jumpToStep(6)">hook</span>
+      <span class="step-label-item" onclick="jumpToStep(7)">doctor</span>
     </div>
   </div>
 
@@ -116,36 +128,24 @@
         { type: 'blank', delay: 500 },
         { type: 'cmd', text: 'npx envcrypted init', delay: 0 },
         { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-cyan', text: '  ███████╗███╗   ██╗██╗   ██╗ ██████╗██████╗ ██╗   ██╗██████╗ ████████╗███████╗██████╗', delay: 500 },
-        { type: 'out', cls: 'out-cyan', text: '  ██╔════╝████╗  ██║██║   ██║██╔════╝██╔══██╗╚██╗ ██╔╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗', delay: 100 },
-        { type: 'out', cls: 'out-cyan', text: '  █████╗  ██╔██╗ ██║██║   ██║██║     ██████╔╝ ╚████╔╝ ██████╔╝   ██║   █████╗  ██║  ██║', delay: 100 },
-        { type: 'out', cls: 'out-cyan', text: '  ██╔══╝  ██║╚██╗██║╚██╗ ██╔╝██║     ██╔══██╗  ╚██╔╝  ██╔═══╝    ██║   ██╔══╝  ██║  ██║', delay: 100 },
-        { type: 'out', cls: 'out-cyan', text: '  ███████╗██║ ╚████║ ╚████╔╝ ╚██████╗██║  ██║   ██║   ██║        ██║   ███████╗██████╔╝', delay: 100 },
-        { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-dim', text: '  v1.0.3 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 300 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-white', text: '  Setting up envcrypted...', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  v1.1.0 — Secure .env encryption. Zero account. Zero server. Just works.', delay: 500 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  ? Where to store your encrypted vault?', delay: 600 },
+        { type: 'out', cls: 'out-white', text: '  Setting up envcrypted...', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  ? Storage type:', delay: 500 },
         { type: 'out', cls: 'out-green', text: '  ❯ Local only (store .env.vault in this folder)', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '    GitHub (commit and push vault to your repo)', delay: 200 },
-        { type: 'blank', delay: 600 },
-        { type: 'out', cls: 'out-dim', text: '  ? Generate a secure master key automatically? (Y/n)', delay: 500 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  ? Generate a secure master key automatically? (Y/n)', delay: 400 },
         { type: 'out', cls: 'out-green', text: '  Y', delay: 600 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-green', text: '  ✔  Master key generated!', delay: 700 },
-        { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-yellow out-bold', text: '  ⚠  SAVE THIS KEY SOMEWHERE SAFE. You cannot recover your .env without it.', delay: 500 },
-        { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-dim', text: '  Master Key: ', extra: { cls: 'out-white out-bold', text: 'ec7460bc85cf989a328b0a1f80b19c27507405825347da68...' }, delay: 400 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-green', text: '  ✔  Initialized! Storage: local', delay: 500 },
-        { type: 'out', cls: 'out-dim', text: '     Config saved to .envcrypted.json', delay: 200 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-cyan', text: '  Next steps:', delay: 300 },
-        { type: 'out', cls: 'out-white', text: '     1. Add .env to your .gitignore', delay: 200 },
-        { type: 'out', cls: 'out-white', text: '     2. Run: npx envcrypted push', delay: 200 },
-        { type: 'out', cls: 'out-white', text: '     3. Share master key securely with your team', delay: 200 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Master key generated!', delay: 600 },
+        { type: 'out', cls: 'out-yellow out-bold', text: '  ⚠  SAVE THIS KEY. You cannot recover .env without it.', delay: 400 },
+        { type: 'out', cls: 'out-dim', text: '  Master Key: ', extra: { cls: 'out-white out-bold', text: 'ec7460bc85cf989a328b0a1f80b19c275074...' }, delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Added to .gitignore: .env, .env.*', delay: 500 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Initialized! Storage: local', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '     Config saved to .envcrypted.json', delay: 200 },
       ]
     },
     {
@@ -153,34 +153,30 @@
       lines: [
         { type: 'cmd', text: 'npx envcrypted audit', delay: 0 },
         { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-dim', text: '  Scanning .env for issues...', delay: 600 },
-        { type: 'blank', delay: 800 },
-        { type: 'out', cls: 'out-white out-bold', text: '  ── Audit Report ──────────────────────────────────', delay: 400 },
-        { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-red out-bold', text: '  ✖  3 Critical Issue(s) Found:', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  Scanning .env for issues...', delay: 700 },
+        { type: 'blank', delay: 600 },
+        { type: 'out', cls: 'out-white out-bold', text: '  ── Audit Report ──────────────────────────────────', delay: 300 },
         { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-red', text: '     Line 1: Weak password (too short)', delay: 400 },
+        { type: 'out', cls: 'out-red out-bold', text: '  ✖  3 Critical Issue(s) Found:', delay: 400 },
+        { type: 'blank', delay: 150 },
+        { type: 'out', cls: 'out-red', text: '     Line 1: Weak password (too short)', delay: 300 },
         { type: 'out', cls: 'out-dim', text: '     → DB_PASSWORD=1234', delay: 150 },
-        { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-red', text: '     Line 2: Placeholder key detected', delay: 400 },
+        { type: 'blank', delay: 150 },
+        { type: 'out', cls: 'out-red', text: '     Line 2: Placeholder key detected', delay: 300 },
         { type: 'out', cls: 'out-dim', text: '     → API_KEY=your-api-key-here', delay: 150 },
-        { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-red', text: '     Line 3: MongoDB URI with credentials exposed', delay: 400 },
+        { type: 'blank', delay: 150 },
+        { type: 'out', cls: 'out-red', text: '     Line 3: MongoDB URI with credentials exposed', delay: 300 },
         { type: 'out', cls: 'out-dim', text: '     → DATABASE_URL=mongodb+srv://admin:pass@cluster...', delay: 150 },
-        { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-yellow out-bold', text: '  ⚠  1 Warning(s):', delay: 400 },
         { type: 'blank', delay: 200 },
-        { type: 'out', cls: 'out-yellow', text: '     Line 5: Localhost value — not safe for production', delay: 300 },
+        { type: 'out', cls: 'out-yellow out-bold', text: '  ⚠  1 Warning(s):', delay: 300 },
+        { type: 'out', cls: 'out-yellow', text: '     Line 5: Localhost — not safe for production', delay: 250 },
         { type: 'out', cls: 'out-dim', text: '     → API_URL=http://localhost:3000', delay: 150 },
-        { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-green', text: '  ✔  4 variable(s) look safe.', delay: 400 },
-        { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-cyan', text: '  ── Summary ───────────────────────────────────────', delay: 300 },
+        { type: 'blank', delay: 200 },
+        { type: 'out', cls: 'out-green', text: '  ✔  4 variable(s) look safe.', delay: 300 },
+        { type: 'blank', delay: 200 },
         { type: 'out', cls: 'out-red', text: '     Critical : 3', delay: 200 },
-        { type: 'out', cls: 'out-yellow', text: '     Warnings : 1', delay: 200 },
-        { type: 'out', cls: 'out-green', text: '     Safe     : 4', delay: 200 },
-        { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  Run "npx envcrypted push" to encrypt and store your .env securely.', delay: 400 },
+        { type: 'out', cls: 'out-yellow', text: '     Warnings : 1', delay: 150 },
+        { type: 'out', cls: 'out-green', text: '     Safe     : 4', delay: 150 },
       ]
     },
     {
@@ -189,59 +185,141 @@
         { type: 'cmd', text: 'npx envcrypted push', delay: 0 },
         { type: 'blank', delay: 400 },
         { type: 'out', cls: 'out-dim', text: '  ? Enter your master key: ', extra: { cls: 'out-white', text: '••••••••••••••••••••••••••••••••' }, delay: 800 },
-        { type: 'blank', delay: 600 },
-        { type: 'out', cls: 'out-dim', text: '  Encrypting .env...', delay: 800 },
-        { type: 'blank', delay: 1200 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  Encrypting .env...', delay: 900 },
+        { type: 'blank', delay: 1000 },
         { type: 'out', cls: 'out-green', text: '  ✔  Encrypted vault saved locally as .env.vault', delay: 500 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  Tip: Commit .env.vault to version control and share', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '       master key securely with your team.', delay: 100 },
+        { type: 'out', cls: 'out-dim', text: '  Tip: Commit .env.vault and share master key securely.', delay: 300 },
         { type: 'blank', delay: 400 },
-        { type: 'cmd', text: 'ls -la | grep env', delay: 600 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-red', text: '  .env              ← NEVER commit this', delay: 400 },
-        { type: 'out', cls: 'out-green', text: '  .env.vault        ← Safe to commit ✔', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  .envcrypted.json  ← Config (no secrets)', delay: 300 },
-        { type: 'blank', delay: 400 },
-        { type: 'cmd', text: 'git add .env.vault && git commit -m "update vault"', delay: 600 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-green', text: '  [main 3a2f1b] update vault', delay: 500 },
-        { type: 'out', cls: 'out-dim', text: '   1 file changed, 1 insertion(+)', delay: 200 },
+        { type: 'cmd', text: 'ls | grep env', delay: 500 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-cyan', text: '  ✔  Vault committed. Team can now pull and decrypt.', delay: 400 },
+        { type: 'out', cls: 'out-red', text: '  .env              ← NEVER commit this', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  .env.vault        ← Safe to commit ✔', delay: 250 },
+        { type: 'out', cls: 'out-dim', text: '  .envcrypted.json  ← Config (no secrets)', delay: 250 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-cyan', text: '  ✔  Vault ready. Team can now pull and decrypt.', delay: 400 },
       ]
     },
     {
       label: 'npx envcrypted pull',
       lines: [
-        { type: 'out', cls: 'out-dim', text: '  # Simulating new team member joining...', delay: 0 },
+        { type: 'out', cls: 'out-dim', text: '  # New team member joining the project...', delay: 0 },
         { type: 'blank', delay: 300 },
         { type: 'cmd', text: 'npm install envcrypted', delay: 400 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-dim', text: '  added 53 packages in 3.1s', delay: 1000 },
-        { type: 'out', cls: 'out-green', text: '  ✔  envcrypted installed', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  envcrypted installed', delay: 900 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  # .env.vault already in repo — no .env file', delay: 300 },
-        { type: 'blank', delay: 400 },
-        { type: 'cmd', text: 'npx envcrypted pull', delay: 600 },
-        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-dim', text: '  # .env.vault already in repo — no .env file yet', delay: 300 },
+        { type: 'blank', delay: 300 },
+        { type: 'cmd', text: 'npx envcrypted pull', delay: 500 },
+        { type: 'blank', delay: 300 },
         { type: 'out', cls: 'out-dim', text: '  ? Enter your master key: ', extra: { cls: 'out-white', text: '••••••••••••••••••••••••••••••••' }, delay: 800 },
-        { type: 'blank', delay: 600 },
-        { type: 'out', cls: 'out-dim', text: '  Decrypting vault...', delay: 800 },
-        { type: 'blank', delay: 1000 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  Decrypting vault...', delay: 900 },
+        { type: 'blank', delay: 800 },
         { type: 'out', cls: 'out-green', text: '  ✔  .env restored from local vault successfully!', delay: 500 },
         { type: 'blank', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  Your .env file has been restored.', delay: 300 },
-        { type: 'out', cls: 'out-dim', text: '  Keep your master key safe.', delay: 200 },
-        { type: 'blank', delay: 400 },
-        { type: 'cmd', text: 'cat .env', delay: 600 },
-        { type: 'blank', delay: 400 },
-        { type: 'out', cls: 'out-yellow', text: '  DB_PASSWORD=supersecret_production_pass', delay: 300 },
+        { type: 'cmd', text: 'cat .env', delay: 500 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-yellow', text: '  DB_PASSWORD=supersecret_production_pass', delay: 250 },
         { type: 'out', cls: 'out-yellow', text: '  API_KEY=sk-live-abc123xyz789', delay: 200 },
         { type: 'out', cls: 'out-yellow', text: '  JWT_SECRET=ultra_secure_jwt_key_2026', delay: 200 },
-        { type: 'out', cls: 'out-yellow', text: '  DATABASE_URL=mongodb+srv://prod@cluster.mongodb.net', delay: 200 },
-        { type: 'blank', delay: 300 },
+        { type: 'blank', delay: 200 },
         { type: 'out', cls: 'out-green out-bold', text: '  ✔  All secrets restored. Ready to develop!', delay: 400 },
+      ]
+    },
+    {
+      label: 'npx envcrypted generate',
+      lines: [
+        { type: 'out', cls: 'out-dim', text: '  # Generate .env.example for your team', delay: 0 },
+        { type: 'blank', delay: 300 },
+        { type: 'cmd', text: 'cat .env', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-yellow', text: '  DB_PASSWORD=supersecret123', delay: 200 },
+        { type: 'out', cls: 'out-yellow', text: '  API_KEY=sk-live-abc123xyz', delay: 150 },
+        { type: 'out', cls: 'out-yellow', text: '  JWT_SECRET=myprodsecret', delay: 150 },
+        { type: 'out', cls: 'out-yellow', text: '  DATABASE_URL=mongodb+srv://prod@cluster', delay: 150 },
+        { type: 'blank', delay: 400 },
+        { type: 'cmd', text: 'npx envcrypted generate', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  Generating .env.example...', delay: 700 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env.example generated successfully!', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  Keys preserved, values removed.', delay: 200 },
+        { type: 'out', cls: 'out-dim', text: '  Safe to commit .env.example to version control.', delay: 200 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-cyan', text: '  ── Generated Keys ────────────────────────────────', delay: 300 },
+        { type: 'out', cls: 'out-white', text: '     DB_PASSWORD=', extra: { cls: 'out-dim', text: '<your-value-here>' }, delay: 200 },
+        { type: 'out', cls: 'out-white', text: '     API_KEY=', extra: { cls: 'out-dim', text: '<your-value-here>' }, delay: 150 },
+        { type: 'out', cls: 'out-white', text: '     JWT_SECRET=', extra: { cls: 'out-dim', text: '<your-value-here>' }, delay: 150 },
+        { type: 'out', cls: 'out-white', text: '     DATABASE_URL=', extra: { cls: 'out-dim', text: '<your-value-here>' }, delay: 150 },
+      ]
+    },
+    {
+      label: 'npx envcrypted status',
+      lines: [
+        { type: 'cmd', text: 'npx envcrypted status', delay: 0 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-white out-bold', text: '  ── envcrypted Status ─────────────────────────────', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Initialized', delay: 400 },
+        { type: 'out', cls: 'out-dim', text: '     Storage  : local', delay: 150 },
+        { type: 'out', cls: 'out-dim', text: '     Version  : 1.1.0', delay: 150 },
+        { type: 'out', cls: 'out-dim', text: '     Created  : 18/03/2026, 10:30 AM', delay: 150 },
+        { type: 'blank', delay: 200 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env found (6 variables, 0.3kb)', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env.vault found (last updated: 18/03/2026)', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env.example found', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env is in .gitignore', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Git pre-commit hook installed', delay: 300 },
+      ]
+    },
+    {
+      label: 'npx envcrypted hook install',
+      lines: [
+        { type: 'out', cls: 'out-dim', text: '  # Protect your repo from accidental .env commits', delay: 0 },
+        { type: 'blank', delay: 300 },
+        { type: 'cmd', text: 'npx envcrypted hook install', delay: 400 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Git pre-commit hook installed!', delay: 600 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  Now every commit will:', delay: 300 },
+        { type: 'out', cls: 'out-white', text: '     • Warn if .env exists but not encrypted', delay: 250 },
+        { type: 'out', cls: 'out-white', text: '     • Block commit if .env is accidentally staged', delay: 250 },
+        { type: 'blank', delay: 500 },
+        { type: 'out', cls: 'out-dim', text: '  # Now try to commit .env accidentally...', delay: 400 },
+        { type: 'blank', delay: 300 },
+        { type: 'cmd', text: 'git add .env && git commit -m "update"', delay: 500 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-yellow', text: '  🔐 envcrypted: .env detected before commit', delay: 500 },
+        { type: 'out', cls: 'out-red out-bold', text: '  ✖  ERROR: .env is staged for commit! Remove it:', delay: 400 },
+        { type: 'out', cls: 'out-white', text: '     git reset HEAD .env', delay: 200 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-cyan', text: '  ✔  Commit blocked. Your secrets are safe.', delay: 400 },
+      ]
+    },
+    {
+      label: 'npx envcrypted doctor',
+      lines: [
+        { type: 'cmd', text: 'npx envcrypted doctor', delay: 0 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-white out-bold', text: '  ── envcrypted Doctor ─────────────────────────────', delay: 400 },
+        { type: 'blank', delay: 200 },
+        { type: 'out', cls: 'out-dim', text: '  Checking your setup...', delay: 500 },
+        { type: 'blank', delay: 400 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Node.js version: v20.11.0', delay: 300 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env file found', delay: 250 },
+        { type: 'out', cls: 'out-green', text: '  ✔  envcrypted initialized (.envcrypted.json found)', delay: 250 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env.vault exists', delay: 250 },
+        { type: 'out', cls: 'out-green', text: '  ✔  .env is protected in .gitignore', delay: 250 },
+        { type: 'out', cls: 'out-green', text: '  ✔  Git repository detected', delay: 250 },
+        { type: 'out', cls: 'out-yellow', text: '  ⚠  Pre-commit hook not installed (optional)', delay: 250 },
+        { type: 'out', cls: 'out-yellow', text: '  ⚠  .env.example missing (optional)', delay: 250 },
+        { type: 'blank', delay: 300 },
+        { type: 'out', cls: 'out-green out-bold', text: '  ✔  Core setup is healthy!', delay: 400 },
+        { type: 'blank', delay: 200 },
+        { type: 'out', cls: 'out-dim', text: '  Tip: Run "npx envcrypted hook install" for extra safety.', delay: 300 },
+        { type: 'out', cls: 'out-dim', text: '  Tip: Run "npx envcrypted generate" to create .env.example.', delay: 300 },
       ]
     }
   ];
@@ -269,15 +347,12 @@
 
   function addCursor() { removeCursor(); const cur = document.createElement('span'); cur.className = 'cursor-blink'; cur.id = 'activeCursor'; termBody.appendChild(cur); }
   function removeCursor() { const old = document.getElementById('activeCursor'); if (old) old.remove(); }
-
   function updateTabs() { document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === currentStep)); }
-
   function updateDots() {
     document.querySelectorAll('.step-dot').forEach((d, i) => { d.classList.remove('active', 'done'); if (i === currentStep) d.classList.add('active'); else if (i < currentStep) d.classList.add('done'); });
     document.querySelectorAll('.step-label-item').forEach((l, i) => { l.classList.remove('active'); if (i === currentStep) l.classList.add('active'); });
   }
-
-  function updateStepLabel() { document.getElementById('stepLabel').textContent = `Step ${currentStep + 1} of 4 — ${STEPS[currentStep].label}`; }
+  function updateStepLabel() { document.getElementById('stepLabel').textContent = `Step ${currentStep + 1} of 8 — ${STEPS[currentStep].label}`; }
 
   function playNextLine() {
     if (!isPlaying) return;

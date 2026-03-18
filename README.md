@@ -7,7 +7,6 @@
 
 ---
 
-
 ## The Problem
 
 Every developer has faced this:
@@ -35,6 +34,8 @@ Your secrets travel over chat apps, emails, Slack messages. They get leaked, for
 - **No cloud. No account. No server.**
 - Works with any Git repo or just locally
 - Detects weak/exposed values with the built-in auditor
+- Auto-protects `.gitignore` on init
+- Git pre-commit hook to block accidental `.env` commits
 
 ---
 
@@ -59,20 +60,14 @@ npx envcrypted pull
 
 ```json
 "scripts": {
-  "env:init":  "envcrypted init",
-  "env:audit": "envcrypted audit",
-  "env:push":  "envcrypted push",
-  "env:pull":  "envcrypted pull"
+  "env:init":     "envcrypted init",
+  "env:audit":    "envcrypted audit",
+  "env:push":     "envcrypted push",
+  "env:pull":     "envcrypted pull",
+  "env:generate": "envcrypted generate",
+  "env:status":   "envcrypted status",
+  "env:doctor":   "envcrypted doctor"
 }
-```
-
-Then run:
-
-```bash
-npm run env:audit
-npm run env:init
-npm run env:push
-npm run env:pull
 ```
 
 ---
@@ -80,7 +75,7 @@ npm run env:pull
 ## Commands
 
 ### `envcrypted init`
-Initialize envcrypted in your project. Generates a master key and sets your storage preference (local or GitHub).
+Initialize envcrypted in your project. Generates a master key, sets your storage preference (local or GitHub), and auto-updates `.gitignore` to protect your `.env`.
 
 ```bash
 npx envcrypted init
@@ -133,14 +128,86 @@ npx envcrypted audit
    Safe     : 4
 ```
 
+### `envcrypted generate`
+Generates a `.env.example` file from your `.env` — strips all values, keeps all keys. Safe to commit publicly.
+
+```bash
+npx envcrypted generate
+```
+
+**Example output:**
+```
+DB_PASSWORD=<your-value-here>
+API_KEY=<your-value-here>
+JWT_SECRET=<your-value-here>
+DATABASE_URL=<your-value-here>
+```
+
+### `envcrypted status`
+Shows a quick snapshot of your project's encryption state — `.env`, vault, `.gitignore`, git hook, and `.env.example`.
+
+```bash
+npx envcrypted status
+```
+
+**Example output:**
+```
+── envcrypted Status ─────────────────────────────
+
+✔  Initialized
+     Storage  : local
+     Version  : 1.1.0
+     Created  : 18/03/2026
+
+✔  .env found (6 variables, 0.3kb)
+✔  .env.vault found (last updated: 18/03/2026)
+✔  .env.example found
+✔  .env is in .gitignore
+✔  Git pre-commit hook installed
+```
+
+### `envcrypted hook install`
+Installs a git pre-commit hook that warns if `.env` is unencrypted and **blocks** any commit where `.env` is accidentally staged.
+
+```bash
+npx envcrypted hook install
+npx envcrypted hook uninstall
+```
+
+### `envcrypted doctor`
+Runs 8 health checks on your setup and tells you exactly what's wrong and how to fix it.
+
+```bash
+npx envcrypted doctor
+```
+
+**Example output:**
+```
+── envcrypted Doctor ─────────────────────────────
+
+✔  Node.js version: v20.0.0
+✔  .env file found
+✔  envcrypted initialized
+✔  .env.vault exists
+✔  .env is protected in .gitignore
+✔  Git repository detected
+⚠  Pre-commit hook not installed (optional)
+⚠  .env.example missing (optional)
+
+✔  Everything looks great! Your setup is healthy.
+```
+
 ---
 
 ## Workflow
 
 **Team Lead (Project Setup):**
 ```bash
+npm install envcrypted
 npx envcrypted init         # generate master key, choose storage
 npx envcrypted audit        # scan .env for issues first
+npx envcrypted generate     # create .env.example for team
+npx envcrypted hook install # block accidental .env commits
 npx envcrypted push         # encrypt .env → .env.vault
 # share master key with team securely (password manager, etc.)
 ```
@@ -152,9 +219,14 @@ npx envcrypted init         # initialize with same storage type
 npx envcrypted pull         # enter master key → .env restored
 ```
 
+**Check Your Setup:**
+```bash
+npx envcrypted status       # quick health snapshot
+npx envcrypted doctor       # full diagnosis with fixes
+```
+
 **Rotating Keys:**
 ```bash
-# Change master key, re-push
 npx envcrypted push         # enter new master key
 # Share new key with team
 ```
@@ -178,12 +250,16 @@ The encrypted `.env.vault` is safe to commit to public or private repos. Without
 
 ## Add to .gitignore
 
+`envcrypted init` does this automatically. But if you need to do it manually:
+
 ```bash
 # Always ignore raw .env
 .env
+.env.*
 
-# Commit the encrypted vault
-# .env.vault  ← this is safe to commit
+# These are safe to commit
+# .env.vault
+# .env.example
 ```
 
 ---
